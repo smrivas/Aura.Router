@@ -1,5 +1,5 @@
 ---
-title: Aura Router, is a PHP 5.3+ library that implements web routing
+title: Aura Router is a PHP 5.3+ library that implements web routing
 layout: default
 ---
 
