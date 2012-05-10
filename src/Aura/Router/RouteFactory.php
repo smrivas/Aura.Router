@@ -36,6 +36,7 @@ class RouteFactory
         'generate'    => null,
         'name_prefix' => null,
         'path_prefix' => null,
+        'domain'      => null
     ];
     
     /**
@@ -62,7 +63,8 @@ class RouteFactory
             $params['is_match'],
             $params['generate'],
             $params['name_prefix'],
-            $params['path_prefix']
+            $params['path_prefix'],
+            $params['domain']
         );
     }
 }

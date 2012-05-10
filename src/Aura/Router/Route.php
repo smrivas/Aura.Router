@@ -167,6 +167,15 @@ class Route
      * 
      */
     protected $debug;
+
+    /**
+     *
+     * If domain level routing requested, set to true or 1
+     *
+     * @var bool
+     *
+     */
+    protected $domain;
     
     /**
      * 
@@ -210,7 +219,8 @@ class Route
         $is_match    = null,
         $generate    = null,
         $name_prefix = null,
-        $path_prefix = null
+        $path_prefix = null,
+        $domain      = null
     ) {
         // set the name, with prefix if needed
         $this->name_prefix = (string) $name_prefix;
@@ -236,6 +246,7 @@ class Route
         $this->routable    = (bool) $routable;
         $this->is_match    = $is_match;
         $this->generate    = $generate;
+        $this->domain      = ($domain === null) ? false : true;
         
         // convert path and params to a regular expression
         $this->setRegex();
@@ -275,7 +286,7 @@ class Route
             return false;
         }
         
-        $is_match = $this->isRegexMatch($path)
+        $is_match = $this->isRegexMatch($path, $server)
                  && $this->isMethodMatch($server)
                  && $this->isSecureMatch($server)
                  && $this->isCustomMatch($server);
@@ -380,8 +391,11 @@ class Route
      * @return bool True on a match, false if not.
      * 
      */
-    protected function isRegexMatch($path)
+    protected function isRegexMatch($path, $server)
     {
+        if ($this->domain) {
+            $path = $server['HTTP_HOST'] . $path;
+        }
         $match = preg_match("#^{$this->regex}$#", $path, $this->matches);
         if (! $match) {
             $this->debug[] = 'Not a regex match.';
